@@ -1,2 +1,5 @@
 1) To create an IMA policy - you need to get a policy document via data block and then, assign it to the policy.
 2) VPC with AWS ipv6 -  set the attribute assign_generated_ipv6_cidr_block=true
+3) Create AMI from EC2 instance - use aws_ami_from_instance
+      - First get the instance ID using a data block
+      - Then use that insatnce ID to create AMI
