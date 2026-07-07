@@ -1,0 +1,2 @@
+1) To create an IMA policy - you need to get a policy document via data block and then, assign it to the policy.
+2) 
