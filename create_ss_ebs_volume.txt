@@ -1,0 +1,32 @@
+resource "aws_ebs_volume" "k8s_volume" {
+  availability_zone = "us-east-1a"
+  size              = 5
+  type              = "gp2"
+  tags = {
+    Name        = "devops-vol"
+  }
+}
+
+resource "aws_ebs_snapshot" "devops_vol_ss" {
+  volume_id   = aws_ebs_volume.k8s_volume.id
+  description = "Devops Snapshot"
+  tags = {
+    Name        = "devops-vol-ss"
+  }
+}
+
+--> Add this to after resource is created
+data "aws_ebs_snapshot" "check_status" {
+  most_recent = true
+  owners = ["self"]
+  filter {
+    name   = "tag:Name"
+    values = ["devops-vol-ss"]
+  }
+}
+
+# Output block to print the snapshot state to your console
+output "ebs_snapshot_state" {
+  description = "Current status of the 'devops-vol-ss' snapshot"
+  value       = data.aws_ebs_snapshot.check_status.state
+}
