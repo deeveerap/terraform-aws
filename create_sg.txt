@@ -1,0 +1,28 @@
+# We get the default vpc and store it under default variable.
+data "aws_vpc" "default" {
+  default = true
+}
+
+# Creating security Group
+resource "aws_security_group" "nautilus_sg" {
+  name        = "nautilus-sg"
+  description = "Security group for Nautilus App Servers"
+  vpc_id = data.aws_vpc.default.id
+}
+
+# Creating the inbound rules to be attached to SG
+resource "aws_vpc_security_group_ingress_rule" "allow_http" {
+  security_group_id = aws_security_group.nautilus_sg.id
+  cidr_ipv4         = "0.0.0.0/0"  # This should be a string
+  from_port         = 80
+  ip_protocol       = "tcp"
+  to_port           = 80
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
+  security_group_id = aws_security_group.nautilus_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
+}
