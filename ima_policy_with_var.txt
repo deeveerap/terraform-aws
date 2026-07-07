@@ -1,0 +1,23 @@
+Create variable.tf
+
+variable KKE_iampolicy {
+    type = string
+    default = "iampolicy_john"
+}
+
+
+Create main.tf
+--> To create a policy you need a policy document 
+data "aws_iam_policy_document" "kke_policy_doc" {
+  statement {
+    actions   = ["s3:GetObject", "s3:ListBucket"]
+    resources = ["arn:aws:s3:::example-bucket", "arn:aws:s3:::example-bucket/*"]
+    effect    = "Allow"
+  }
+}
+resource "aws_iam_policy" "kke_policy" {
+  name        = var.KKE_iampolicy
+  path        = "/"
+  description = "IAM policy managed by Terraform"
+  policy      = data.aws_iam_policy_document.kke_policy_doc.json
+}
