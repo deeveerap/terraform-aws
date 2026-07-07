@@ -1,0 +1,5 @@
+# no name attribute is available - should bind the name via Tags
+resource aws_vpc devops_vpc {
+    cidr_block = "10.1.0.0/16"
+    tags = { Name = "devops-vpc" }
+}
