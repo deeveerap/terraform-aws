@@ -1,0 +1,18 @@
+# Deploy the CloudFormation Stack
+resource "aws_cloudformation_stack" "nautilus_stack" {
+  name = "nautilus-stack"
+
+  # CloudFormation Template Body written in YAML
+  template_body = <<STACK
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation stack deployed via Terraform containing a versioned S3 bucket.
+
+Resources:
+  NautilusBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: nautilus-bucket-15924
+      VersioningConfiguration:
+        Status: Enabled
+STACK
+}
