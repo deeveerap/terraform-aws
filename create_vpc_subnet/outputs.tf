@@ -1,9 +1,9 @@
 output "kke_vpc_name" {
-  value       = aws_vpc.main.id
+  value       = aws_vpc.main.tags["Name"]
   description = "The unique identifier of the deployed VPC"
 }
 
 output "kke_subnet_name" {
-  value       = aws_subnet.mains.id
+  value       = aws_subnet.mains.tags["Name"]
   description = "The unique identifier of the deployed Subnet"
 }
