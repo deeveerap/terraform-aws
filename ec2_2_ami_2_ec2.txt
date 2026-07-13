@@ -1,0 +1,45 @@
+# Provision original EC2 instance
+resource "aws_instance" "ec2" {
+  ami           = "ami-0c101f26f147fa7fd"
+  instance_type = "t2.micro"
+
+  vpc_security_group_ids = [
+    "sg-00c2f336f6032a213"
+  ]
+
+  tags = {
+    Name = "devops-ec2"
+  }
+}
+
+# Create AMI from the existing EC2 instance
+resource "aws_ami_from_instance" "ec2ami" {
+  name               = "devops-ec2-ami"
+  source_instance_id = aws_instance.ec2.id
+}
+
+# Check AMI status
+data "aws_ami" "check_status" {
+  filter {
+    name   = "name"
+    values = ["devops-ec2-ami"]
+  }
+
+  depends_on = [aws_ami_from_instance.ec2ami]
+}
+
+# Launch a new EC2 instance using the created AMI
+resource "aws_instance" "ec2_2" {
+  ami           = aws_ami_from_instance.ec2ami.id
+  instance_type = "t2.micro"
+
+  vpc_security_group_ids = [
+    "sg-00c2f336f6032a213"
+  ]
+
+  depends_on = [aws_ami_from_instance.ec2ami]
+
+  tags = {
+    Name = "devops-ec2-new"
+  }
+}
