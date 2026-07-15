@@ -18,9 +18,9 @@ resource "aws_s3_bucket_acl" "wordpress_bucket_acl_new" {
 
 resource "null_resource" "move_s3_objects" {
   # Triggers a rerun every time, remove or change this if it should only run once
-  triggers = {
-    always_run = "${timestamp()}"
-  }
+ # triggers = {
+ #   always_run = "${timestamp()}"
+ # }
 
   provisioner "local-exec" {
     command = "aws s3 cp s3://${aws_s3_bucket.wordpress_bucket.bucket} s3://${aws_s3_bucket.wordpress_bucket_new.bucket} --recursive"
